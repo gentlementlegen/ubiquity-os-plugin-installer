@@ -10,8 +10,8 @@
     "node": ">=20.10.0"
   },
   "scripts": {
-    "start": "tsx build/esbuild-server.ts",
-    "build": "tsx build/esbuild-build.ts",
+    "start": "bun --hot --no-clear-screen build/esbuild-server.ts",
+    "build": "bun build/esbuild-build.ts",
     "check-formatting": "run-p check-formatting:* format:cspell",
     "check-formatting:lint": "eslint --fix-dry-run",
     "format": "run-s format:lint format:prettier format:cspell",
@@ -74,7 +74,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "yarn prettier --write",
+      "prettier --write",
       "eslint --fix"
     ],
     "src/**.{ts,json}": [
