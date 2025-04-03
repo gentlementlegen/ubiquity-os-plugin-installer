@@ -1,3 +1,4 @@
+import { CONFIG_FULL_PATH, CONFIG_ORG_REPO } from "@ubiquity-os/plugin-sdk/constants";
 import MarkdownIt from "markdown-it";
 import { Manifest, Plugin } from "../../types/plugins";
 import { getManifestCache } from "../../utils/storage";
@@ -125,8 +126,16 @@ export function renderConfigEditor(renderer: ManifestRenderer, pluginManifest: M
   }
 
   const org = localStorage.getItem("selectedOrg");
+  const repo = localStorage.getItem("selectedRepo") ?? CONFIG_ORG_REPO;
+  const pluginNameFormatted = pluginName.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
-  updateGuiTitle(`Editing configuration for ${pluginName.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())} in ${org}`);
+  if (!org) {
+    console.error("Selected organization not found in localStorage.");
+    updateGuiTitle(pluginNameFormatted, "UnknownOrg", repo, CONFIG_FULL_PATH);
+  } else {
+    updateGuiTitle(pluginNameFormatted, org, repo, CONFIG_FULL_PATH);
+  }
+
   renderer.manifestGui?.classList.add("plugin-editor");
   renderer.manifestGui?.classList.add("rendered");
 }

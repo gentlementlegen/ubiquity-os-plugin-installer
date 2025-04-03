@@ -9,12 +9,20 @@ export function normalizePluginName(pluginName: string): string {
     .replace(/-+/g, "-");
 }
 
-export function updateGuiTitle(title: string): void {
+export function updateGuiTitle(title: string): void;
+export function updateGuiTitle(pluginNameFormatted: string, org: string, repo: string, filePath: string): void;
+export function updateGuiTitle(titleOrPluginName: string, org?: string, repo?: string, filePath?: string): void {
   const guiTitle = document.querySelector("#manifest-gui-title");
   if (!guiTitle) {
     throw new Error("GUI Title not found");
   }
-  guiTitle.textContent = title;
+
+  if (org && repo && filePath) {
+    const url = `https://github.com/${org}/${repo}/blob/HEAD/${filePath}`;
+    guiTitle.innerHTML = `Editing <a href="${url}" target="_blank" rel="noopener noreferrer">configuration</a> for ${titleOrPluginName} in ${org}`;
+  } else {
+    guiTitle.textContent = titleOrPluginName;
+  }
 }
 
 export function closeAllSelect() {
